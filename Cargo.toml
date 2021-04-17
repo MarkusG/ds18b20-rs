@@ -1,5 +1,5 @@
 [package]
-name = "ds18b20-parser"
+name = "temperature-monitor"
 version = "0.1.0"
 authors = ["Mark Gross <mark.gross2001@gmail.com>"]
 edition = "2018"

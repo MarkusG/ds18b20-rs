@@ -1,5 +1,5 @@
 use std::fs;
-use ds18b20_parser::read_temp;
+use temperature_monitor::read_temp;
 
 fn main() {
     loop {
