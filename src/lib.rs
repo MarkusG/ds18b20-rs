@@ -2,6 +2,8 @@ use std::fs;
 use std::path::PathBuf;
 use std::ffi::OsStr;
 
+use postgres::Client;
+
 // the sensor only gives us 5 digits of precision, so an f32 should be fine
 pub fn read_temp(device_name: &OsStr) -> Option<f32> {
     let mut path = PathBuf::from("/sys/bus/w1/devices");
@@ -21,5 +23,14 @@ pub fn read_temp(device_name: &OsStr) -> Option<f32> {
             // divide by 1000 to get the real temperature
             return Some(raw.split('=').nth(2).unwrap().trim().parse::<f32>().unwrap() / 1000.0);
         }
+    }
+}
+
+pub fn record_temp(client: &mut Client, sensor: &str, temp: f32) {
+    if let Err(e) = client.execute(
+        "INSERT INTO temp (sensor, temp) VALUES ($1, $2)",
+        &[&sensor, &temp]
+        ) {
+        eprintln!("Error recording temperature: {}", e);
     }
 }
